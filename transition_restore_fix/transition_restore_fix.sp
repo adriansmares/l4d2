@@ -69,7 +69,7 @@ public void OnPluginStart() {
 
 public void OnPluginEnd() {
 	if (g_pThis)
-		StoreToAddress(g_pThis, g_pData, NumberType_Int32);
+		StoreToAddress(g_pThis, view_as<int>(g_pData), NumberType_Int32);
 }
 
 public void OnConfigsExecuted() {
@@ -254,7 +254,7 @@ MRESReturn DD_PlayerSaveData_Restore_Pre(Address pThis, DHookParam hParams) {
 		if (pData) {
 			g_pThis = pThis;
 			g_pData = LoadFromAddress(pThis, NumberType_Int32);
-			StoreToAddress(pThis, pData, NumberType_Int32);
+			StoreToAddress(pThis, view_as<int>(pData), NumberType_Int32);
 		}
 	}
 
@@ -298,7 +298,7 @@ MRESReturn DD_PlayerSaveData_Restore_Post(Address pThis, DHookParam hParams) {
 	}
 
 	if (g_pThis)
-		StoreToAddress(g_pThis, g_pData, NumberType_Int32);
+		StoreToAddress(g_pThis, view_as<int>(g_pData), NumberType_Int32);
 
 	g_pThis = Address_Null;
 	g_pData = Address_Null;
@@ -379,7 +379,7 @@ Address FindBotDataByModelName(const char[] model) {
 			continue;
 
 		SDKCall(g_hSDK_KeyValues_GetString, ptr, value, sizeof value, "ModelName", "");
-		al_Kv.Set(al_Kv.Push(g_aBotData.FindValue(ptr) == -1 ? (strcmp(value, model, false) == 0 ? 0 : 1) : strcmp(value, model, false) == 0 ? 2 : 3), ptr, 1);
+		al_Kv.Set(al_Kv.Push(g_aBotData.FindValue(view_as<int>(ptr)) == -1 ? (strcmp(value, model, false) == 0 ? 0 : 1) : strcmp(value, model, false) == 0 ? 2 : 3), view_as<int>(ptr), 1);
 	}
 
 	if (!al_Kv.Length)
@@ -387,9 +387,9 @@ Address FindBotDataByModelName(const char[] model) {
 	else {
 		al_Kv.Sort(Sort_Ascending, Sort_Integer);
 
-		ptr = al_Kv.Get(0, 1);
+		ptr = view_as<Address>(view_as<int>(al_Kv.Get(0, 1)));
 		if (al_Kv.Get(0, 0) < 2)
-			g_aBotData.Push(ptr);
+			g_aBotData.Push(view_as<int>(ptr));
 	}
 
 	delete al_Kv;
@@ -419,7 +419,7 @@ Address FindBotDataByCharacter(int character) {
 			continue;
 
 		SDKCall(g_hSDK_KeyValues_GetString, ptr, value, sizeof value, "character", "0");
-		al_Kv.Set(al_Kv.Push(g_aBotData.FindValue(ptr) == -1 ? (StringToInt(value) == character ? 0 : 1) : StringToInt(value) == character ? 2 : 3), ptr, 1);
+		al_Kv.Set(al_Kv.Push(g_aBotData.FindValue(view_as<int>(ptr)) == -1 ? (StringToInt(value) == character ? 0 : 1) : StringToInt(value) == character ? 2 : 3), view_as<int>(ptr), 1);
 	}
 
 	if (!al_Kv.Length)
@@ -427,9 +427,9 @@ Address FindBotDataByCharacter(int character) {
 	else {
 		al_Kv.Sort(Sort_Ascending, Sort_Integer);
 
-		ptr = al_Kv.Get(0, 1);
+		ptr = view_as<Address>(view_as<int>(al_Kv.Get(0, 1)));
 		if (al_Kv.Get(0, 0) < 2)
-			g_aBotData.Push(ptr);
+			g_aBotData.Push(view_as<int>(ptr));
 	}
 
 	delete al_Kv;
